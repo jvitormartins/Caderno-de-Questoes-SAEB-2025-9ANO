@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Interativa - Caderno de Questões SAEB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f3f4f6;
+        }
+        .descriptor-list-item {
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+        .descriptor-list-item:hover {
+            background-color: #f9fafb;
+            border-left-width: 4px;
+            transform: translateX(4px);
+        }
+        .nav-button {
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+        .nav-button:active {
+            transform: scale(0.98);
+        }
+        .question-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .question-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+        }
+        .texto-enunciado {
+            white-space: pre-wrap;
+            background-color: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+            line-height: 1.6;
+        }
+        #home-screen {
+            min-height: calc(100vh - 220px); 
+        }
+        .alternative-button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .alternative-button.correct {
+            background-color: #dcfce7; /* green-100 */
+            border-color: #22c55e; /* green-500 */
+            color: #166534; /* green-800 */
+        }
+        .alternative-button.incorrect {
+            background-color: #fee2e2; /* red-100 */
+            border-color: #ef4444; /* red-500 */
+            color: #991b1b; /* red-800 */
+        }
+        .alternative-button:not([disabled]):hover {
+             background-color: #e5e7eb; /* gray-200 */
+        }
+
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4">
+            <div class="text-center">
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">Análise interativa do Caderno de Questões - Saeb 2025</h1>
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-700">9º Ano - Modelo 02</h2>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Screen Buttons -->
+    <section id="home-screen" class="container mx-auto px-6 py-12 flex flex-col items-center justify-center">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full max-w-5xl">
+            <button data-view="view-portugues-all" class="nav-button flex flex-col items-center justify-center text-center bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-xl shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                <span class="text-xl font-bold">Questões de Português</span>
+                <span class="text-sm font-light mt-1">Ver todas as 15 questões.</span>
+            </button>
+            <button data-view="view-matematica-all" class="nav-button flex flex-col items-center justify-center text-center bg-green-500 hover:bg-green-600 text-white p-6 rounded-xl shadow-lg">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 14h.01M12 11h.01M9 11h.01M15 11h.01M12 7h.01M15 7h.01M9 4h6a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V6a2 2 0 012-2z" /></svg>
+                <span class="text-xl font-bold">Questões de Matemática</span>
+                <span class="text-sm font-light mt-1">Ver todas as 15 questões.</span>
+            </button>
+            <button data-view="view-portugues-descritor" class="nav-button flex flex-col items-center justify-center text-center bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-xl shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                <span class="text-xl font-bold">Descritores de Português</span>
+                <span class="text-sm font-light mt-1">Navegar por habilidades específicas.</span>
+            </button>
+            <button data-view="view-matematica-descritor" class="nav-button flex flex-col items-center justify-center text-center bg-green-500 hover:bg-green-600 text-white p-6 rounded-xl shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-4 6h4m2 0h-4m0 0V9m0 0H9m4 0h2M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>
+                <span class="text-xl font-bold">Descritores de Matemática</span>
+                <span class="text-sm font-light mt-1">Navegar por habilidades específicas.</span>
+            </button>
+        </div>
+    </section>
+    
+    <!-- Main Content Area -->
+    <main id="main-content" class="container mx-auto px-6 py-8 hidden">
+        <nav class="mb-6 text-gray-600" aria-label="Breadcrumb">
+            <ol id="breadcrumb" class="list-none p-0 inline-flex">
+                <!-- Breadcrumbs will be populated here -->
+            </ol>
+        </nav>
+        <div id="content-container">
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center p-4 z-50">
+        <div id="modal-content" class="bg-white rounded-lg shadow-2xl p-6 w-full max-w-5xl max-h-[95vh] overflow-y-auto relative">
+             <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-light">&times;</button>
+             <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white mt-12 py-4 shadow-inner">
+        <div class="container mx-auto px-6">
+            <p class="text-center text-sm text-gray-600">Infográfico desenvolvido por: Prof. J. Vitor Martins</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA ---
+        const descritores = {
+            portugues: { 'D07': 'D07 - Identificar a tese de um texto.', 'D08': 'D08 - Estabelecer relação entre a tese e os argumentos oferecidos para sustentá-la.', 'D11': 'D11 - Estabelecer relação causa/consequência entre partes e elementos do texto.', 'D14': 'D14 - Distinguir um fato da opinião relativa a esse fato.', 'D15': 'D15 - Reconhecer relações lógico-discursivas presentes no texto, marcadas por conjunções, advérbios etc.' },
+            matematica: { 'D08': 'D08 - Resolver problema utilizando propriedades dos polígonos (soma de seus ângulos internos, número de diagonais, cálculo da medida de cada ângulo interno nos polígonos regulares).', 'D14': 'D14 - Resolver problema envolvendo noções de volume.', 'D24': 'D24 - Reconhecer as representações decimais dos números racionais como uma extensão do sistema de numeração decimal, identificando a existência de "ordens" como décimos, centésimos e milésimos.', 'D25': 'D25 - Efetuar cálculos que envolvam operações com números racionais (adição, subtração, multiplicação, divisão, potenciação).', 'D29': 'D29 - Resolver problema que envolva variação proporcional, direta ou inversa, entre grandezas.' }
+        };
+        const data = {
+            portugues: [
+                { id: 'p1', numero: 1, descritor: 'D11', textoEnunciado: `A Árvore de Agulha\n\nEra uma vez dois irmãos... O mais velho sempre foi maldoso com o mais jovem: comia sua comida, roubava sua sobremesa e batia nele. Num dia frio de inverno, o irmão mais velho foi à floresta buscar lenha para a casa. Quando ele juntou o suficiente, ele decidiu ir e vender no mercado.\n\nDepois de vender a lenha, ele voltou pela floresta e continuou cortando alguns galhos, apenas para se divertir. Foi aí que ele encontrou uma árvore toda dourada. Quando estava prestes a cortá-la, a árvore falou:\n– Por favor, não corte meus galhos! Se você não cortar meus galhos, eu lhe darei maçãs de ouro.\n\nEle concordou e a árvore lhe deu algumas maçãs de ouro, mas o garoto ficou desapontado e exigiu mais. Quando levantou o machado, ameaçando cortá-la, a árvore fez cair centenas de agulhas em cima do menino. Caído no chão, sem conseguir se mover, ele fica chorando.\n\nO irmão mais novo, preocupado com a sua demora, resolveu partir para procurá-lo. Quando o encontrou, sentou do seu lado e, com todo o amor e paciência, tirou cada agulha do seu corpo. Comovido com o carinho, o mais velho pediu desculpa para o irmão e prometeu que nunca mais ia maltrá-lo.\n\nA árvore mágica, que percebeu que ele realmente tinha mudado e reconhecido seus erros, presenteou os garotos com uma grande quantidade de maçãs de ouro.`, questao: 'A árvore jogou centenas de agulhas no garoto porque ele...', alternativas: { A: 'ameaçou cortá-la.', B: 'batia no irmão mais novo.', C: 'voltou para casa pela floresta.', D: 'decidiu vender a lenha no mercado.' }, correta: 'A', dica: 'Para encontrar a resposta, localize no texto o momento exato em que a árvore reage. Qual foi a ação do garoto que provocou essa reação?', comentario: '<ul><li><b>Análise da Causa e Efeito:</b> A questão pede o motivo (causa) pelo qual a árvore jogou agulhas (efeito).</li><li><b>Localização no Texto:</b> O trecho "...o garoto ficou desapontado e exigiu mais. Quando levantou o machado, ameaçando cortá-la, a árvore fez cair centenas de agulhas..." conecta diretamente a ameaça à reação da árvore.</li><li><b>Conclusão:</b> A ameaça de cortar a árvore foi a causa direta da consequência de ser coberto por agulhas.</li></ul>' },
+                { id: 'p2', numero: 2, descritor: 'D08', textoEnunciado: `The Marvels - Review: uma história boa com um ritmo coeso\n\nAs Marvels traz de volta três grandes heroínas do MCU: Ms. Marvel, ou Kamala Khan, Capitã Marvel e Monica Rambeau. Os poderes delas se entrelaçam e isso faz com que precisem se unir diante de uma nova ameaça terrível que coloca vários planetas em risco.\n\nO filme é uma continuação da série Invasão Secreta e, além das três protagonistas, conta com Nick Fury na liderança da Shield, além dos Skrull e Kree como principais antagonistas.\n\nApesar de o começo do filme ser um pouco devagar e até mesmo confuso, principalmente para quem não acompanhou a trajetória das protagonistas e da história até ali, ele logo adquire ritmo e prende você. Espere uma trama alegre e cheia de momentos marcantes, mesmo diante das dificuldades.\n\nParece que as obras anteriores foram um aprendizado. As Marvels é um filme divertido e tem qualidade o suficiente para se classificar como uma boa obra do MCU.\n\nVer aquele monte de ovinhos chocarem em gatinhos fofos é emocionante e rendeu boas cenas. Sem contar a utilidade deles que Nick Fury reconheceu logo de cara e não dispensou.\n\nO planeta musical foi um dos melhores momentos, especialmente ao descobrirmos que Capitã Marvel está casada e é uma princesa de um planeta inteiro.`, questao: 'No texto "The Marvels - Review...", o autor defende a ideia de que o filme é divertido e tem qualidade. Um dos argumentos usados para defender esta tese está no trecho:', alternativas: { A: '"As Marvels traz de volta três grandes heroínas do MCU..."', B: '"O filme é uma continuação da série Invasão Seletiva..."', C: '"Parece que as obras anteriores foram um aprendizado."', D: '"Ver aquele monte de ovinhos chocarem em gatinhos fofos é emocionante e rendeu boas cenas."' }, correta: 'D', dica: "A tese é que o filme é 'divertido e tem qualidade'. Qual das opções apresenta um exemplo concreto retirado do filme que comprova essa ideia?", comentario: '<ul><li><b>Tese do Autor:</b> A ideia principal é que o filme é "divertido e tem qualidade".</li><li><b>Função do Argumento:</b> Um argumento serve para provar a tese com exemplos ou evidências.</li><li><b>Análise da Alternativa:</b> A descrição de uma cena ("ovinhos chocando em gatinhos fofos") como "emocionante" é um exemplo concreto que ilustra e sustenta a afirmação de que o filme é divertido.</li></ul>' },
+                { id: 'p3', numero: 3, descritor: 'D14', textoEnunciado: 'Leia novamente o texto "The Marvels - Review: uma história boa com um ritmo coeso".', questao: 'Qual das alternativas abaixo contém um fato sem marcas de opinião?', alternativas: { A: '"As Marvels traz de volta três grandes heroínas do MCU..."', B: '"O filme é uma continuação da série Invasão Secreta..."', C: '"As Marvels é um filme divertido e tem qualidade..."', D: '"O planeta musical foi um dos melhores momentos..."' }, correta: 'B', dica: 'Um fato é uma informação que pode ser comprovada, sem julgamento de valor. Uma opinião usa adjetivos e expressões que demonstram um ponto de vista. Procure a alternativa que apenas informa algo sobre o filme.', comentario: '<ul><li><b>Diferença entre Fato e Opinião:</b> Fato é uma informação objetiva e verificável. Opinião é um julgamento pessoal, subjetivo.</li><li><b>Análise das Alternativas:</b> A alternativa B afirma que o filme é uma continuação, o que pode ser verificado. As outras usam palavras que expressam julgamento: "grandes" (A), "divertido" (C) e "melhores" (D).</li></ul>' },
+                { id: 'p4', numero: 4, descritor: 'D11', textoEnunciado: `Lenda do Sol e da Lua\n\nSegundo essa lenda, existiam dois povos rivais. Eles viviam próximos um do outro, mas nunca se encontravam, pois era proibido que tivessem contato.\n\nEntretanto, um dia um jovem guerreiro saiu para caçar na floresta e conheceu uma bela moça da etnia inimiga.\n\nEles se atraíram um pelo outro e passaram a se encontrar outras vezes. E assim foi nascendo um grande amor.\n\nSempre que podiam, os jovens arranjavam uma forma de estarem juntos sem que ninguém soubesse.\n\nCerta vez, no entanto, um dos integrantes da comunidade em que o rapaz vivia flagrou o encontro dos dois. Eles foram levados à tribo e sentenciados à morte.\n\nO cacique era o pai do guerreiro e ficou muito angustiado com a situation. Ele pediu então ao pajé que preparasse uma poção mágica para salvar o casal.\n\nAssim foi feito. Os dois tomaram o preparado e se transformaram em astros do céu. O moço virou o sol, já a moça se converteu em lua.\n\nInfelizmente o sol e a lua quase nunca se encontram, exceto quando ocorrem os eclipses, é nesse momento que eles voltam a se amar.`, questao: 'Os jovens foram transformados em astros do céu porque eles...', alternativas: { A: 'tomaram uma poção mágica feita pelo pajé.', B: 'arranjaram uma forma de estarem juntos.', C: 'se encontravam às escondidas.', D: 'se atraíram um pelo outro.' }, correta: 'A', dica: 'A transformação em astros foi a consequência. Qual foi a causa direta, o evento que fez isso acontecer, de acordo com o texto?', comentario: '<ul><li><b>Análise da Causa e Efeito:</b> A questão busca a causa direta da transformação.</li><li><b>Localização no Texto:</b> O texto diz: "Assim foi feito. Os dois tomaram o preparado e se transformaram em astros do céu."</li><li><b>Conclusão:</b> A ação de tomar a poção mágica foi o evento que causou diretamente a transformação em Sol e Lua.</li></ul>' },
+                { id: 'p5', numero: 5, descritor: 'D15', textoEnunciado: 'Releia o texto "Lenda do Sol e da Lua".', questao: 'No trecho: "Certa vez, no entanto, um dos integrantes da comunidade..." a expressão destacada estabelece relação de', alternativas: { A: 'comparação.', B: 'explicação.', C: 'conclusão.', D: 'oposição.' }, correta: 'D', dica: "A expressão 'no entanto' serve para ligar duas ideias. Ela indica uma soma, uma explicação, uma conclusão ou um contraste/oposição?", comentario: '<ul><li><b>Função do Conectivo:</b> A locução "no entanto" é adversativa.</li><li><b>Análise do Contexto:</b> O texto afirmava que os jovens se encontravam em segredo. "No entanto" introduz uma ideia contrária a esse segredo: o momento em que foram flagrados.</li></ul>' },
+                { id: 'p6', numero: 6, descritor: 'D14', textoEnunciado: `Resenha: Cães e gatos, de Carlos Ruas\n\nAssim surgiu o livro Cães e Gatos, pela editora Planeta, reunindo algumas das melhores tirinhas dessa dupla improvável de heróis. Se bem que por aguentar as presepadas de seus bichinhos, acho que o herói é o Carlos mesmo! Inspirado em uma vida de convivência com os bichinhos, as situações são hilárias, como o cão cismado que está sendo seguido, sendo que é só o seu rabo.\n\nCães e gatos é uma edição colorida, curtinha, você lê muito rápido. Mas nem por isso não está recheada do conteúdo irônico de Ruas e seus bichos. Algumas das lições mais engraçadas do gato para o cão é a de ensinar a pedir carinho e quando o gato termina, o cão está esparramado no chão, se entregando completamente. É ou não é assim??\n\nAlém das rusgas entre os dois bichinhos, o dono também se vê às voltas com eles, sendo acordado de madrugada para dar comida, encontrando a casa destruída ou vendo o cão se esfregar na lama ou começar a derrubar as coisas se o dono parece imóvel. É, isso me soa muito familiar!`, questao: 'Nesse texto, há um fato no trecho:', alternativas: { A: '"...acho que o herói é o Carlos mesmo!"', B: '"Algumas das lições mais engraçadas do gato para o cão..."', C: '"...reunindo algumas das melhores tirinhas..."', D: '"Além das rusgas entre os dois bichinhos, o dono também se vê às voltas com eles..."' }, correta: 'D', dica: "Relembre: um fato descreve uma ação ou situação. Uma opinião qualifica algo ou alguém. Procure o trecho que não contém adjetivos como 'melhor', 'engraçado' ou expressões como 'eu acho'.", comentario: '<ul><li><b>Diferença entre Fato e Opinião:</b> Fato é uma descrição objetiva. Opinião envolve julgamento de valor.</li><li><b>Análise das Alternativas:</b> A alternativa D descreve uma situação da história. As outras contêm marcadores de opinião: "acho que" (A), "engraçadas" (B) e "melhores" (C).</li></ul>' },
+                { id: 'p7', numero: 7, descritor: 'D08', textoEnunciado: `Os benefícios dos ovos\n\nO ovo sempre esteve presente na nossa alimentação, porém apenas as pesquisas mais recentes conseguiram apontar seus reais benefícios para nossa saúde.\n\nEstudos apontaram que ingerir o alimento durante a manhã ajuda no emagrecimento, pois quem consome esse alimento acaba ficando mais satisfeito e consome, assim, menos calorias durante o dia. Além de ter substâncias capazes de diminuir a ansiedade.\n\nO ovo é rico em proteína de alto valor biológico e aminoácidos que ajudam a digestão a ficar mais lenta, demorando mais para você sentir fome.\n\nA sua gema contém gorduras boas, como monoinsaturada e ômega 3 que ajudam a controlar o nível de açúcar no sangue. Já a clara possui leucina, um aminoácido que ajuda a manter a massa magra.\n\nPara garantir esses benefícios não é necessário comer ovo todo dia, 2 a 3 vezes por semana já são o suficiente. Quando for preparar, prefira fazer ele cozido ou mexido, evite ao máximo fritá-lo.`, questao: 'Um argumento utilizado nesse texto para defender a ideia de que comer ovo pela manhã ajuda no emagrecimento é', alternativas: { A: '"...apenas as pesquisas mais recentes conseguiram apontar seus reais benefícios..."', B: '"...quem consome esse alimento acaba ficando mais satisfeito e consome, assim, menos calorias..."', C: '"Para garantir esses benefícios não é necessário comer ovo todo dia..."', D: '"Quando for preparar, prefira fazer ele cozido ou mexido..."' }, correta: 'B', dica: "A ideia principal é que o ovo ajuda a emagrecer. O argumento deve explicar *por que* isso acontece. Qual alternativa apresenta essa explicação?", comentario: '<ul><li><b>Tese do Autor:</b> Comer ovo pela manhã ajuda a emagrecer.</li><li><b>Função do Argumento:</b> O argumento explica o porquê da tese ser verdadeira.</li><li><b>Análise da Alternativa:</b> A alternativa B explica o mecanismo: o ovo gera saciedade, o que leva a um menor consumo de calorias. Isso sustenta diretamente a tese.</li></ul>' },
+                { id: 'p8', numero: 8, descritor: 'D07', textoEnunciado: `Coleta seletiva: sabia que é possível implementar essa prática em casa?\n\nA sustentabilidade tem se tornado uma pauta cada vez mais comum na sociedade. Hoje, não é difícil encontrar exemplos de ações voltadas à conscientização sobre questões ambientais e de responsabilidade social.\n\nEm um cenário de grande debate e preocupação ecológica, a busca por alternativas capazes de minimizar os danos causados pelo consumo excessivo de produtos e o descarte inadequado de resíduos é constante.\n\nÉ nesse ponto que soluções, como a coleta seletiva de lixo, ganham força, despontando como uma alternativa viável e de fácil aplicação na rotina das pessoas. No entanto, apesar das suas vantagens e forte apelo sustentável, essa é uma prática pouco aplicada nas cidades, sobretudo em âmbito residencial.\n\nDiferentemente do que muitos podem imaginar, a coleta seletiva não exige grandes esforços para ser colocada em prática. Na realidade, como dito, o que é necessário é uma mudança nos hábitos e na cultura do cidadão, que precisa consumir e agir de modo mais consciente dentro e fora da sua residência.`, questao: 'Nesse texto, o trecho que apresenta a ideia defendida é:', alternativas: { A: '"...alternativas capazes de minimizar os danos causados pelo consumo excessivo..."', B: '"...a coleta seletiva de lixo, ganham força, despontando como uma alternativa viável e de fácil aplicação..."', C: '"...essa é uma prática pouco aplicada nas cidades..."', D: '"...a coleta seletiva é uma prática voltada à separação de resíduos..."' }, correta: 'B', dica: 'A tese é a ideia central que o autor quer defender. Geralmente é uma afirmação forte. Qual das opções representa melhor a principal mensagem do texto sobre a coleta seletiva?', comentario: '<ul><li><b>Identificação da Tese:</b> A tese é a ideia principal que o texto defende.</li><li><b>Análise da Alternativa:</b> O trecho B afirma que a coleta seletiva é uma "alternativa viável e de fácil aplicação", que é a ideia central que o autor desenvolve e defende ao longo do texto.</li></ul>' },
+                { id: 'p9', numero: 9, descritor: 'D15', textoEnunciado: 'Observe a charge a seguir:\n\n[Imagem de um menino na calçada gritando para uma mulher na janela de uma casa: "Ô mãããããããe! Correio...". Um carteiro está ao lado do menino. A mulher na janela responde: "Se eu não pedi nada na Shopee, então seu pai tomou outra multa."]', questao: 'No segundo balão de fala: "...então seu pai tomou outra multa.", o termo em destaque estabelece relação de', alternativas: { A: 'comparação.', B: 'conclusão.', C: 'oposição.', D: 'adição.' }, correta: 'B', dica: "Analise o raciocínio da mãe. Ela parte de uma condição ('Se eu não pedi nada...') para chegar a um resultado lógico. A palavra 'então' introduz que tipo de ideia?", comentario: '<ul><li><b>Função do Conectivo:</b> A palavra "então" é uma conjunção conclusiva.</li><li><b>Análise do Raciocínio:</b> A mãe parte de uma premissa ("eu não pedi nada") para chegar a uma dedução lógica ("logo, é uma multa para o seu pai").</li></ul>' },
+                { id: 'p10', numero: 10, descritor: 'D14', textoEnunciado: `Menina incentivada por Marta a jogar copa de futsal masculina em 2017 se emociona: "Me deu coragem"\n\nQuantas mulheres ou meninas abandonaram o sonho de correr atrás de uma bola de futebol ou futsal por preconceito, falta de incentivo ou qualquer outro motivo? A Copa do Mundo coloca o futebol feminino ainda mais em evidência. Porém, longe dos gramados da Austrália, muitas histórias anônimas precisam ser contadas e recontadas, como a de Maria Alice Barbosa.\n\nEm 2017, a mineira da cidade de Vieiras contou com o empenho da mãe e com o incentivo especial da Rainha Marta para conseguir disputar uma copa de futsal masculino e para não desistir de jogar bola aos 10 anos de idade. Seis anos depois, o brilho no olhar pelo esporte, que poderia ter se apagado naquela ocasião, está mais forte e Maria Alice segue em busca do sonho de se tornar uma atleta profissional.\n\n"As palavras da Marta me deram coragem e, principalmente, esperança de que eu, mesmo sendo uma mulher, poderia participar não só daquela competição, como também de outras que vieram e virão. Sem dúvida, ouvir da Rainha Marta que 'guerreiros não desistem nunca', me ajudou a simplesmente não desistir. Gratidão a ela sempre"`, questao: 'Nesse texto, há uma opinião no trecho:', alternativas: { A: '"A Copa do Mundo coloca o futebol feminino ainda mais em evidência."', B: '"Em 2017, a mineira da cidade de Vieiras contou com o empenho da mãe..."', C: '"...o incentivo especial da Rainha Marta..."', D: '"...Maria Alice segue em busca do sonho de se tornar uma atleta profissional."' }, correta: 'C', dica: "Procure por uma palavra que qualifica algo, que dá uma característica subjetiva. A palavra 'especial' é um fato ou uma opinião do autor sobre o incentivo?", comentario: '<ul><li><b>Identificação de Opinião:</b> A opinião é marcada por palavras que atribuem qualidades ou juízos de valor.</li><li><b>Análise da Alternativa:</b> O adjetivo "especial" qualifica o incentivo, expressando um julgamento de valor do autor sobre o ato de Marta. As outras alternativas descrevem fatos.</li></ul>' },
+                { id: 'p11', numero: 11, descritor: 'D08', textoEnunciado: `Problemas do Leite de Soja\n\nO leite de soja é uma das mais usadas opções alternativas ao leite de vaca, principalmente por causa da intolerância à lactose, sendo colocado pela mídia e alguns profissionais de saúde como uma bebida saudável. Mas o que médicos atualizados e estudos têm a dizer sobre isso?\n\nUma das principais razões para evitar produtos de soja é porque a grande maioria da soja cultivada é geneticamente modificada (OGM). A variedade transgênica plantada em 90% no Brasil é de soja Roundup projetada para sobreviver sendo envenenada com quantidades letais do herbicida Roundup da Monsanto. O glifosato, principal agente ativo do Roundup, é um dos produtos químicos mais tóxicos utilizados na agricultura hoje.\n\nO leite de soja também contém o aditivo carragenina, uma substância que pode causar inflamação gastrointestinal e úlceras. A soja inibe também a absorção de minerais. A qualidade dos ingredientes do leite de soja também é um problema, muitos possuem açúcares, xarope de milho, amido, corantes e aromatizantes, que são substâncias que não fazem bem à saúde.`, questao: 'Para defender a ideia de que a soja não faz bem à saúde, o autor utiliza como argumento o trecho:', alternatives: { A: '"O leite de soja é uma das mais usadas opções alternativas ao leite de vaca..."', B: '"...sendo colocado pela mídia... como uma bebida saudável."', C: '"Mas o que médicos atualizados e estudos têm a dizer sobre isso?"', D: '"...contém o aditivo carragenina, uma substância que pode causar inflamação..."' }, correta: 'D', dica: 'A tese é que o leite de soja não é saudável. Qual das alternativas apresenta um dado concreto, uma informação específica que sustenta essa afirmação?', comentario: '<ul><li><b>Tese do Autor:</b> A soja não faz bem à saúde.</li><li><b>Análise do Argumento:</b> A alternativa D apresenta uma informação técnica e específica (a presença de carragenina e seus efeitos negativos) para comprovar a tese do autor.</li></ul>' },
+                { id: 'p12', numero: 12, descritor: 'D15', textoEnunciado: `Arapongas, 05 de julho de 2013.\n\nPrezado Sr. Silva,\n\nComo leitor assíduo da revista Saúde, em primeiro lugar, venho agradecer o benefício que os artigos publicados vêm proporcionando à minha família. Muitas das dicas fornecidas conseguimos colocar em prática e, dessa forma, melhorando consideravelmente nosso bem-estar.\n\nNo último número da revista, lemos uma matéria sobre os perigos que o excesso de sal na alimentação pode provocar à nossa saúde. É fato que já tínhamos algum conhecimento sobre o assunto, porém, não em detalhes. Como nossa família está sempre em busca de uma vida mais saudável, desejamos, também, colocar em prática algumas destas dicas.\n\nOcorre que o sal já faz parte de nossas vidas há tempos e não se encontram com tanta facilidade receitas que não o utilizem.`, questao: 'No trecho "Sendo assim, solicito a gentileza...", a expressão "SENDO ASSIM" sugere', alternativas: { A: 'comparação.', B: 'conclusão.', C: 'finalidade.', D: 'oposição.' }, correta: 'B', dica: "A expressão 'Sendo assim' conecta o que foi dito antes com o que vem depois. Ela indica que o que vem a seguir é uma conclusão baseada nas informações anteriores.", comentario: '<ul><li><b>Função do Conectivo:</b> A locução "Sendo assim" tem valor conclusivo.</li><li><b>Análise do Raciocínio:</b> O autor expõe um problema (dificuldade de achar receitas sem sal) e, a partir disso, conclui com um pedido. A expressão conecta o problema à solução solicitada.</li></ul>' },
+                { id: 'p13', numero: 13, descritor: 'D11', textoEnunciado: 'Releia a carta enviada à revista Saúde.', questao: 'De acordo com esse texto, a família deseja colocar em prática as dicas da revista because', alternativas: { A: 'prefere substituir o sal por outras ervas.', B: 'tem dificuldade em encontrar receitas sem o uso de sal.', C: 'leu a matéria sobre o excesso de sal.', D: 'busca sempre uma vida mais saudável.' }, correta: 'D', dica: 'O texto apresenta um motivo principal que impulsiona a família. Qual é a razão fundamental por trás do desejo de seguir as dicas da revista?', comentario: '<ul><li><b>Análise da Causa:</b> A questão pede o motivo principal da ação da família.</li><li><b>Localização no Texto:</b> O autor afirma explicitamente: "Como nossa família está sempre em busca de uma vida mais saudável, desejamos... colocar em prática algumas destas dicas."</li><li><b>Conclusão:</b> A busca por uma vida saudável é a causa raiz que motiva todas as outras ações.</li></ul>' },
+                { id: 'p14', numero: 14, descritor: 'D07', textoEnunciado: `Alimentação variada é um dos segredos de uma vida saudável\n\nA saúde é uma das maiores riquezas do ser humano, é sinônimo de vida. Por isso, é importante cultivar hábitos que ajudem a mantê-la, para que fiquemos longe dos problemas que possam afetar ou limitar o funcionamento do organismo e o desempenho de nossas atividades. Um dos segredos de uma vida saudável está relacionado a uma alimentação de qualidade, equilibrada e adequada à idade de cada pessoa, pois ela tem relação direta com o fortalecimento da imunidade do organismo, ou seja, com a saúde e o bem-estar.\n\nMas, o que é comer bem? A resposta para essa questão é: manter uma dieta balanceada em nutrientes, que garantam a correta funcionabilidade do organismo e que possam garantir longevidade ao ser humano, sem promover o sobrepeso.\n\nUm programa nutricional adequado é capaz de diminuir o estresse, ansiedade e a irritabilidade, além de facilitar o controle de peso e do humor. Auxilia também no combate a diversas doenças, como diabetes e doenças do coração, por exemplo. Igualmente, pode promover melhora no rendimento de esportistas (amadores e profissionais), potencializar o desenvolvimento físico e cognitivo de crianças e adolescentes, contribuir para uma gestação plena e saudável e para que a pessoa lide melhor com as alterações naturais do envelhecimento.`, questao: 'Qual é a ideia defendida pelo autor desse texto?', alternativas: { A: 'A alimentação balanceada tem relação direta com a saúde e o bem-estar.', B: 'A alimentação saudável pode evitar o envelhecimento precoce.', C: 'O correto funcionamento do organismo garante longevidade.', D: 'O desenvolvimento das crianças é determinado na gestação.' }, correta: 'A', dica: 'A tese geralmente é apresentada no início do texto e reforçada ao longo dele. Qual frase resume melhor a mensagem principal sobre alimentação e saúde?', comentario: '<ul><li><b>Identificação da Tese:</b> A tese é a ideia central do texto.</li><li><b>Análise do Conteúdo:</b> O texto, desde o título até o final, reforça a conexão entre ter uma alimentação de qualidade, equilibrada e variada e a consequência de ter saúde e bem-estar.</li></ul>' },
+                { id: 'p15', numero: 15, descritor: 'D07', textoEnunciado: `Agricultura Familiar: o Brasil quer mais, o Brasil pode mais\n\nA agricultura familiar tem força e tenacidade, uma capacidade incrível e uma perspectiva grandiosa para alimentar o nosso país inteiro, para erradicar a fome, a pobreza e a miséria, levando sonhos e conjunções de felicidade àqueles que mais precisam.\n\nInvestir nesse setor da economia é acreditar na geração de emprego e renda; no desenvolvimento sustentável, no respeito ao meio ambiente, à biodiversidade e ao ecossistema; na segurança alimentar, no combate ao êxodo rural e no crescimento do país em sua essência e realidade.\n\nAtualmente, a agricultura familiar emprega cerca de dez milhões de trabalhadores, segundo o IBGE. Envolve mais de quatro milhões de famílias. É responsável pela economia de 90% dos municípios com até vinte mil habitantes; 40% da população economicamente ativa depende dessa prática.\n\nAinda, segundo o IBGE, ela ocupa 23% do território nacional e 77% dos estabelecimentos; 70% dos agricultores possuem de um a 50 hectares de terra e 70% da alimentação que vai para a mesa do brasileiro é produzida por esse setor.\n\nA importância da sua produção está assim representada: 70% do feijão; 34% do arroz; 87% da mandioca; 46% do milho; 38% do café; 21% do trigo; 60% do leite; 59% do rebanho suíno; 30% dos bovinos; entre outros, como os produtos hortifrutigranjeiros.\n\nA agricultura familiar tem um faturamento anual de US$ 55 bilhões verificados pelos censos agropecuários, conforme a Embrapa. Portanto, é um setor da economia brasileira que merece ser olhado com mais carinho. Os governos precisam ter iniciativas que viabilizem a garantia do que hoje se tem e a própria expansão do setor.`, questao: 'Nesse texto, o autor defende a ideia de que a Agricultura Familiar', alternativas: { A: 'ocupa 23% do território nacional.', B: 'tem força e tenacidade para alimentar o nosso país inteiro.', C: 'emprega cerca de dez milhões de trabalhadores.', D: 'tem um faturamento anual de US$ 55 bilhões.' }, correta: 'B', dica: 'Diferencie a tese dos argumentos. A tese é a afirmação principal. Os argumentos são os dados (como números e estatísticas) usados para provar a tese. Qual opção é a grande afirmação do texto?', comentario: '<ul><li><b>Identificação da Tese:</b> A tese é a afirmação principal.</li><li><b>Análise do Primeiro Parágrafo:</b> O texto se inicia com a afirmação de que a agricultura familiar "tem força... para alimentar o nosso país inteiro".</li><li><b>Diferença para Argumentos:</b> As outras alternativas são dados estatísticos usados como argumentos para provar essa força, mas não são a tese em si.</li></ul>' }
+            ],
+             matematica: [
+                { id: 'm1', numero: 1, descritor: 'D29', textoEnunciado: 'Felipe percorreu 180 quilômetros e percebeu que seu carro gastou 12 litros de gasolina. Sua próxima viagem será mais longa, com um percurso de 540 quilômetros de distância. Ele quer saber quantos litros de combustível serão necessários se realizar esse percurso nas mesmas condições da viagem anterior.', questao: 'Quantos litros de combustível, no mínimo, Felipe gastará na segunda viagem?', alternativas: { A: '36 litros.', B: '30 litros.', C: '24 litros.', D: '4 litros.' }, correta: 'A', dica: 'As grandezas (distância e combustível) são diretamente proporcionais: se uma aumenta, a outra também aumenta. Monte uma regra de três simples para encontrar o valor desconhecido.', comentario: '<ul><li><b>Grandezas:</b> Distância (km) e Consumo (L).</li><li><b>Proporção:</b> Diretamente proporcionais. Mais distância, mais consumo.</li><li><b>Regra de Três:</b> (180 km / 12 L) = (540 km / x L).</li><li><b>Cálculo:</b> 180x = 540 * 12 => 180x = 6480 => x = 36.</li></ul>' },
+                { id: 'm2', numero: 2, descritor: 'D29', textoEnunciado: 'Um livro de Matemática possui 200 páginas e cada página possui 50 linhas. A editora responsável pelo livro planeja uma nova edição com 40 linhas em cada página, alterando o número de páginas e mantendo o conteúdo e demais formatações.', questao: 'Com essa alteração, esse livro de Matemática terá', alternativas: { A: '150 páginas.', B: '160 páginas.', C: '200 páginas.', D: '250 páginas.' }, correta: 'D', dica: 'Pense na relação entre as grandezas: se o número de linhas por página diminui, o número de páginas vai aumentar ou diminuir? Isso indica uma proporção direta ou inversa?', comentario: '<ul><li><b>Grandezas:</b> Linhas por página e Número de páginas.</li><li><b>Proporção:</b> Inversamente proporcionais. Menos linhas por página, mais páginas.</li><li><b>Cálculo:</b> 40 * x = 200 * 50 => 40x = 10000 => x = 250.</li></ul>' },
+                { id: 'm3', numero: 3, descritor: 'D29', textoEnunciado: 'Luciana comprou uma barra de chocolate de 60 g e comeu um pedaço dessa barra. A embalagem apresentava informações nutricionais indicando 3g de proteína para a barra inteira (60g).', questao: 'Considerando que Luciana comeu 20 g desse chocolate, quantos gramas de proteína Luciana ingeriu?', alternativas: { A: '1 g.', B: '3 g.', C: '20 g.', D: '60 g.' }, correta: 'A', dica: 'A relação entre a quantidade de chocolate e a quantidade de proteína é direta. Você pode usar uma regra de três ou perceber que 20g é um terço de 60g.', comentario: '<ul><li><b>Grandezas:</b> Peso do chocolate (g) e Peso da proteína (g).</li><li><b>Proporção:</b> Diretamente proporcionais.</li><li><b>Regra de Três:</b> (60 g chocolate / 3 g proteína) = (20 g chocolate / x g proteína).</li><li><b>Cálculo:</b> 60x = 20 * 3 => 60x = 60 => x = 1.</li></ul>' },
+                { id: 'm4', numero: 4, descritor: 'D14', textoEnunciado: 'Pedro está montando um aquário na sala de sua casa. A figura apresenta as dimensões de 80cm x 30cm x 45cm e o limite máximo de água que Pedro poderá colocar no aquário é de 30cm de altura.', questao: 'Qual o volume necessário de água, em litros, para atingir o limite máximo desse aquário?', alternativas: { A: '108 L.', B: '72 L.', C: '36 L.', D: '24 L.' }, correta: 'B', dica: "Para calcular o volume de água, use as três dimensões: comprimento, largura e a *altura da água* (não a altura total do aquário). Lembre-se que 1 litro equivale a 1.000 cm³.", comentario: '<ul><li><b>Dimensões para o Volume de Água:</b> Comprimento = 80 cm, Largura = 30 cm, Altura da água = 30 cm.</li><li><b>Cálculo do Volume em cm³:</b> V = 80 * 30 * 30 = 72.000 cm³.</li><li><b>Conversão para Litros:</b> Sabendo que 1000 cm³ = 1 L.</li><li><b>Resultado:</b> 72.000 / 1000 = 72 Litros.</li></ul>' },
+                { id: 'm5', numero: 5, descritor: 'D14', textoEnunciado: 'O proprietário de um apiário criou uma embalagem para a comercialização de mel que possui a forma de um paralelepípedo retângulo. Essa embalagem possui como medidas internas 6 cm de largura, 10 cm de comprimento e 12 cm de altura.', questao: 'O volume, em cm³, dessa nova embalagem de mel é:', alternativas: { A: '720.', B: '504.', C: '384.', D: '192.' }, correta: 'A', dica: 'O volume de um paralelepípedo é encontrado multiplicando-se suas três dimensões: comprimento, largura e altura.', comentario: '<ul><li><b>Fórmula do Volume:</b> Volume do paralelepípedo = comprimento × largura × altura.</li><li><b>Cálculo:</b> V = 10 * 6 * 12 = 720 cm³.</li></ul>' },
+                { id: 'm6', numero: 6, descritor: 'D14', textoEnunciado: 'Uma empresa fabrica uma caixa para armazenar leite com o formato de um paralelepípedo reto cujas dimensões internas estão representadas no desenho abaixo: 9cm, 7cm e 16cm.', questao: 'Qual é a medida do volume máximo de leite que pode ser colocado dentro dessa caixa?', alternativas: { A: '32 cm³', B: '79 cm³.', C: '144 cm³', D: '1008 cm³.' }, correta: 'D', dica: 'Assim como na questão anterior, para encontrar o volume máximo, basta multiplicar as três medidas internas da caixa.', comentario: '<ul><li><b>Fórmula do Volume:</b> Volume = comprimento × largura × altura.</li><li><b>Cálculo:</b> V = 9 * 7 * 16 = 1008 cm³.</li></ul>' },
+                { id: 'm7', numero: 7, descritor: 'D25', textoEnunciado: 'Em uma loja, o par de meias custa R$ 5,59 e uma caixa de lenços custa R$ 14,50. Valentina comprou, nessa loja, 2 pares de meias e 1 caixa de lenços.', questao: 'Quanto ela pagou, ao todo, por essa compra?', alternativas: { A: 'R$ 20,09.', B: 'R$ 25,68.', C: 'R$ 34,59.', D: 'R$ 40,18.' }, correta: 'B', dica: 'Primeiro, calcule o custo total dos dois pares de meias. Depois, some esse valor ao custo da caixa de lenços.', comentario: '<ul><li><b>Custo das Meias:</b> 2 * 5,59 = R$ 11,18.</li><li><b>Custo Total:</b> 11,18 (meias) + 14,50 (lenços) = R$ 25,68.</li></ul>' },
+                { id: 'm8', numero: 8, descritor: 'D25', textoEnunciado: 'Considere a expressão numérica apresentada no quadro abaixo: \n\n(-1/2)(-2/1) + (16)^(1/2) + (9)^0', questao: 'Qual é o resultado dessa expressão?', alternativas: { A: '4', B: '5', C: '6', D: '9' }, correta: 'C', dica: 'Resolva a expressão por partes: a multiplicação de frações, a potência com expoente fracionário (que é uma raiz) e a potência com expoente zero. Depois, some os resultados.', comentario: '<ul><li><b>1ª Parte:</b> (-1/2) * (-2/1) = 2/2 = 1.</li><li><b>2ª Parte:</b> (16)^(1/2) = √16 = 4.</li><li><b>3ª Parte:</b> (9)^0 = 1 (qualquer número elevado a zero é 1).</li><li><b>Soma:</b> 1 + 4 + 1 = 6.</li></ul>' },
+                { id: 'm9', numero: 9, descritor: 'D25', textoEnunciado: 'Observe a expressão indicada no quadro:\n\n0,54 + 0,5 - 0,7', questao: 'Ao resolver essa expressão, obtém-se', alternativas: { A: '- 0,52', B: '-0,34', C: '0,34', D: '0,52' }, correta: 'C', dica: 'Realize as operações na ordem em que aparecem. Some os dois primeiros números e depois subtraia o terceiro do resultado.', comentario: '<ul><li><b>Soma:</b> 0,54 + 0,5 (ou 0,50) = 1,04.</li><li><b>Subtração:</b> 1,04 - 0,7 (ou 0,70) = 0,34.</li></ul>' },
+                { id: 'm10', numero: 10, descritor: 'D08', textoEnunciado: 'O professor Caio, de Matemática, representou quatro polígonos regulares no quadro. Em cada um deles, indicou a medida da soma de seus ângulos internos no centro. Para o hexágono (6 lados), a soma é 720°.', questao: 'Calcule a medida de cada ângulo interno do hexágono regular.', alternativas: { A: '90°', B: '120°', C: '150°', D: '180°' }, correta: 'B', dica: 'Um polígono regular tem todos os seus ângulos internos iguais. Se a soma de todos os ângulos é 720° e um hexágono tem 6 ângulos, qual operação você deve fazer?', comentario: '<ul><li><b>Propriedade:</b> Um hexágono regular tem 6 ângulos internos iguais.</li><li><b>Cálculo:</b> (Soma dos ângulos) / (Número de ângulos) = 720° / 6.</li><li><b>Resultado:</b> 120°.</li></ul>' },
+                { id: 'm11', numero: 11, descritor: 'D08', textoEnunciado: 'A quantidade de diagonais de um polígono pode ser determinada por:\n\nD = n * (n - 3) / 2\n\nOnde (D) é a quantidade de diagonais e (n) o número de lados.', questao: 'Desta forma, a quantidade de diagonais de um pentágono é:', alternativas: { A: '2', B: '5', C: '9', D: '20' }, correta: 'B', dica: "Um pentágono tem 5 lados (n=5). Substitua o valor de 'n' na fórmula fornecida e resolva a operação.", comentario: '<ul><li><b>Identificação:</b> Um pentágono tem n = 5 lados.</li><li><b>Aplicação da Fórmula:</b> D = 5 * (5 - 3) / 2.</li><li><b>Cálculo:</b> D = 5 * 2 / 2 = 10 / 2 = 5.</li></ul>' },
+                { id: 'm12', numero: 12, descritor: 'D08', textoEnunciado: 'A soma dos ângulos internos de um polígono pode ser calculada dividindo-o em triângulos. Para isso, traçam-se diagonais a partir de um mesmo vértice. A soma dos ângulos internos é dada por S = (n - 2) * 180°, onde n é o número de lados. A figura mostra um decágono (10 lados).', questao: 'Qual a soma dos ângulos internos do decágono apresentado?', alternativas: { A: '900°', B: '1080°', C: '1260°', D: '1440°' }, correta: 'D', dica: "A questão informa a fórmula para a soma dos ângulos internos: S = (n - 2) * 180°. Um decágono tem 10 lados (n=10). Substitua 'n' e calcule.", comentario: '<ul><li><b>Identificação:</b> Um decágono tem n = 10 lados.</li><li><b>Aplicação da Fórmula:</b> S = (10 - 2) * 180°.</li><li><b>Cálculo:</b> S = 8 * 180° = 1440°.</li></ul>' },
+                { id: 'm13', numero: 13, descritor: 'D24', textoEnunciado: 'Um posto de combustível colocou um cartaz anunciando o preço da gasolina comum por 5,598 reais o litro.', questao: 'Isto significa que o posto vende a gasolina por 5 reais e', alternativas: { A: '598 centésimos de real.', B: '598 milésimos de real.', C: '0,598 décimos de real.', D: '0,598 centésimos de real.' }, correta: 'B', dica: "Conte as casas decimais após a vírgula. A primeira é 'décimos', a segunda é 'centésimos' e a terceira é 'milésimos'. Como lemos o número 598 quando ele ocupa essas três casas?", comentario: '<ul><li><b>Leitura de Decimais:</b> A primeira casa após a vírgula são os décimos, a segunda os centésimos e a terceira os milésimos.</li><li><b>Análise:</b> O número 0,598 corresponde a 598 milésimos.</li></ul>' },
+                { id: 'm14', numero: 14, descritor: 'D24', textoEnunciado: 'O velocista jamaicano Usain Bolt obteve o recorde mundial nos 100 metros rasos, em 2009, na cidade de Berlim, ao percorrer o trajeto em 9,58 segundos.', questao: 'A escrita por extenso do tempo obtido por Bolt é', alternatives: { A: 'nove segundos e cinquenta e oito centésimos de segundo.', B: 'nove segundos e quinhentos e oitenta décimos de segundo.', C: 'nove segundos e cinquenta e oito milésimos de segundo.', D: 'nove segundos e cinquenta e oito décimos de segundo.' }, correta: 'A', dica: "O número 9,58 tem duas casas após a vírgula. A última casa decimal representa os 'centésimos'. Como se lê o número 58 nessa posição?", comentario: '<ul><li><b>Leitura de Decimais:</b> O número tem duas casas decimais, a última sendo a casa dos centésimos.</li><li><b>Análise:</b> O número 0,58 corresponde a cinquenta e oito centésimos.</li></ul>' },
+                { id: 'm15', numero: 15, descritor: 'D24', textoEnunciado: 'Alex determinou a área do tabuleiro abaixo multiplicando suas dimensões.\n\n[Imagem de um tabuleiro de jogo com 0,3m de altura e 0,4m de largura]\n\nEm seguida, anotou seus cálculos:\n\nA = 0,3m * 0,4m = 0,12m²', questao: 'Portanto, a área determinada por Alex foi de', alternativas: { A: 'doze metros quadrados.', B: 'doze décimos de metro quadrado.', C: 'doze centésimos de metro quadrado.', D: 'doze milésimos de metro quadrado.' }, correta: 'C', dica: "O resultado é 0,12 m². O número 12 está ocupando as duas primeiras casas decimais, que correspondem aos décimos e centésimos. Portanto, a leitura é 'doze centésimos'.", comentario: '<ul><li><b>Leitura de Decimais:</b> O número 0,12 tem duas casas decimais, correspondendo a centésimos.</li><li><b>Análise:</b> A leitura correta é "doze centésimos de metro quadrado".</li></ul>' }
+            ]
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentQuestionList = [];
+        let currentQuestionIndex = -1;
+        let currentViewInfo = {};
+
+        // --- RENDERING FUNCTIONS ---
+        function createQuestionCard(question, index) {
+            return `
+                <div data-id="${question.id}" data-index="${index}" class="question-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-all">
+                    <p class="font-bold text-lg text-gray-900 mb-2">${question.numero}.</p>
+                    <div class="texto-enunciado mb-4">${question.textoEnunciado}</div>
+                    <p class="font-bold text-gray-800">${question.questao}</p>
+                </div>
+            `;
+        }
+        
+        function renderDescriptorList(subject, container) {
+            const color = subject === 'portugues' ? 'blue' : 'green';
+            const subjectDescriptors = descritores[subject];
+            let html = `<div class="bg-white p-6 rounded-lg shadow-md"><h3 class="text-2xl font-bold mb-4 text-gray-800">Selecione um Descritor</h3><div class="space-y-2">`;
+
+            for (const code in subjectDescriptors) {
+                const text = subjectDescriptors[code];
+                const questionsCount = data[subject].filter(q => q.descritor === code).length;
+                html += `
+                    <div data-subject="${subject}" data-descriptor-code="${code}" class="descriptor-list-item cursor-pointer p-4 border-l-2 border-gray-200 flex justify-between items-center">
+                        <span class="font-semibold text-gray-700">${text}</span>
+                        <span class="text-sm font-medium bg-${color}-100 text-${color}-800 px-2 py-1 rounded-full">${questionsCount} questões</span>
+                    </div>
+                `;
+            }
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
+        function renderQuestionsForDescriptor(subject, descriptorCode, container) {
+            const filteredQuestions = data[subject].filter(q => q.descritor === descriptorCode).sort((a,b) => a.numero - b.numero);
+            container.innerHTML = `
+                <div class="space-y-4">${filteredQuestions.map((q, index) => createQuestionCard(q, index)).join('')}</div>
+            `;
+            currentQuestionList = filteredQuestions;
+        }
+
+
+        function renderAllContent(subject, container) {
+            const allQuestions = data[subject].sort((a,b) => a.numero - b.numero);
+            container.innerHTML = `
+                <div class="space-y-4">${allQuestions.map((q, index) => createQuestionCard(q, index)).join('')}</div>
+            `;
+            currentQuestionList = allQuestions;
+        }
+
+        // --- NAVIGATION & VIEW LOGIC ---
+        function updateBreadcrumb() {
+            const breadcrumbContainer = document.getElementById('breadcrumb');
+            const homeLink = `<li class="inline-flex items-center"><button data-target="home" class="text-gray-600 hover:text-blue-500">Início</button></li>`;
+            
+            let path = '';
+            if (currentViewInfo.subject) {
+                path += `<li class="inline-flex items-center"><span class="mx-2 text-gray-400">/</span><button data-target="subject" class="text-gray-600 hover:text-blue-500">${currentViewInfo.subject}</button></li>`;
+            }
+            if (currentViewInfo.type) {
+                 path += `<li class="inline-flex items-center"><span class="mx-2 text-gray-400">/</span><button data-target="type" class="text-gray-600 hover:text-blue-500">${currentViewInfo.type}</button></li>`;
+            }
+            if (currentViewInfo.descriptor) {
+                path += `<li class="inline-flex items-center"><span class="mx-2 text-gray-400">/</span><span class="text-gray-800 font-semibold">${currentViewInfo.descriptor.split(' - ')[0]}</span></li>`;
+            }
+            breadcrumbContainer.innerHTML = homeLink + path;
+        }
+        
+        function handleBreadcrumbClick(e) {
+            const target = e.target.dataset.target;
+            if (!target) return;
+
+            switch(target) {
+                case 'home':
+                    showHome();
+                    break;
+                case 'type': // Clicking on 'Por Descritor' goes back to the list of descriptors
+                    const subject = currentViewInfo.subject === 'Português' ? 'portugues' : 'matematica';
+                    delete currentViewInfo.descriptor;
+                    renderDescriptorList(subject, document.getElementById('content-container'));
+                    updateBreadcrumb();
+                    break;
+            }
+        }
+
+        function showView(viewId) {
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            
+            const contentContainer = document.getElementById('content-container');
+            contentContainer.innerHTML = '';
+            
+            const isPortugues = viewId.includes('portugues');
+            const isDescritorView = viewId.includes('descritor');
+            const subjectKey = isPortugues ? 'portugues' : 'matematica';
+
+            currentViewInfo = {
+                subject: isPortugues ? 'Português' : 'Matemática',
+                type: isDescritorView ? 'Por Descritor' : 'Todas as Questões'
+            };
+
+            if (isDescritorView) {
+                renderDescriptorList(subjectKey, contentContainer);
+            } else {
+                renderAllContent(subjectKey, contentContainer);
+            }
+            
+            updateBreadcrumb();
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+            currentQuestionList = [];
+            currentQuestionIndex = -1;
+            currentViewInfo = {};
+            window.scrollTo(0, 0);
+        }
+
+        // --- MODAL LOGIC ---
+        function renderModalContent() {
+            if (currentQuestionIndex < 0 || currentQuestionIndex >= currentQuestionList.length) return;
+
+            const question = currentQuestionList[currentQuestionIndex];
+            const subject = question.id.startsWith('p') ? 'portugues' : 'matematica';
+            const color = subject === 'portugues' ? 'blue' : 'green';
+            
+            let alternativesHtml = '';
+            for (const key in question.alternativas) {
+                alternativesHtml += `
+                    <button data-key="${key}" class="alternative-button border-2 border-gray-300 p-3 rounded-md text-left w-full">
+                        <span class="font-bold">${key})</span> ${question.alternativas[key]}
+                    </button>`;
+            }
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">${question.numero}.</h3>
+                        <div class="texto-enunciado mb-4">${question.textoEnunciado}</div>
+                        <p class="font-bold text-gray-800 text-lg mb-4">${question.questao}</p>
+                        <div id="alternatives-container" class="space-y-3">${alternativesHtml}</div>
+                    </div>
+                    <!-- Right Column -->
+                    <div>
+                        <!-- Help Block (Visible by default) -->
+                        <div id="help-block" class="bg-${color}-50 border-l-4 border-${color}-400 p-4 rounded-r-lg h-full flex flex-col justify-center">
+                            <h4 class="text-lg font-semibold text-${color}-800">Como Resolver?</h4>
+                            <p class="text-${color}-700 mt-2">${question.dica}</p>
+                        </div>
+
+                        <!-- Resolution Block (Hidden by default) -->
+                        <div id="resolution-block" class="hidden opacity-0 transition-opacity duration-500 bg-gray-50 p-4 rounded-lg border">
+                             <h4 class="text-lg font-semibold text-gray-800 border-b-2 border-gray-200 pb-1 mb-2">Alternativa Correta: <span class="text-${color}-600 font-bold">${question.correta}</span></h4>
+                            <div class="mt-4">
+                                <h4 class="text-lg font-semibold text-gray-800 border-b-2 border-gray-200 pb-1 mb-2">Resolução e Comentário</h4>
+                                <div class="text-gray-700 leading-relaxed">${question.comentario}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Navigation -->
+                <div class="mt-8 pt-4 border-t flex justify-between">
+                    <button id="prev-question" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">‹ Anterior</button>
+                    <button id="next-question" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">Próxima ›</button>
+                </div>
+            `;
+            
+            // Attach listeners
+            document.getElementById('alternatives-container').addEventListener('click', handleAlternativeClick);
+            document.getElementById('prev-question').addEventListener('click', () => navigateModal(-1));
+            document.getElementById('next-question').addEventListener('click', () => navigateModal(1));
+
+            // Update nav buttons state
+            document.getElementById('prev-question').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-question').disabled = currentQuestionIndex === currentQuestionList.length - 1;
+        }
+        
+        function handleAlternativeClick(e) {
+            const button = e.target.closest('.alternative-button');
+            if (!button) return;
+
+            const selectedKey = button.dataset.key;
+            const question = currentQuestionList[currentQuestionIndex];
+
+            if (selectedKey === question.correta) {
+                button.classList.add('correct');
+            } else {
+                button.classList.add('incorrect');
+                const correctButton = document.querySelector(`.alternative-button[data-key="${question.correta}"]`);
+                if (correctButton) correctButton.classList.add('correct');
+            }
+
+            // Disable all buttons
+            document.querySelectorAll('.alternative-button').forEach(btn => btn.disabled = true);
+            
+            // Show resolution
+            document.getElementById('help-block').classList.add('hidden');
+            const resolutionBlock = document.getElementById('resolution-block');
+            resolutionBlock.classList.remove('hidden');
+            setTimeout(() => {
+                resolutionBlock.classList.remove('opacity-0');
+            }, 10);
+        }
+        
+        function openModal(index) {
+            currentQuestionIndex = index;
+            renderModalContent();
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() { 
+            document.getElementById('modal').classList.add('hidden'); 
+            document.getElementById('modal-body').innerHTML = ''; // Clear content
+        }
+        
+        function navigateModal(offset) {
+            const newIndex = currentQuestionIndex + offset;
+            if (newIndex >= 0 && newIndex < currentQuestionList.length) {
+                currentQuestionIndex = newIndex;
+                renderModalContent();
+            }
+        }
+
+        // --- HELPERS ---
+        function groupDataByDescritor(dataArray) { return dataArray.reduce((acc, current) => { (acc[current.descritor] = acc[current.descritor] || []).push(current); return acc; }, {}); }
+
+        // --- EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('#home-screen .nav-button').forEach(button => button.addEventListener('click', () => showView(button.dataset.view)));
+            document.getElementById('breadcrumb').addEventListener('click', handleBreadcrumbClick);
+            
+            document.getElementById('main-content').addEventListener('click', e => {
+                const card = e.target.closest('.question-card');
+                if (card) {
+                    openModal(parseInt(card.dataset.index, 10));
+                    return;
+                }
+                
+                const descriptorItem = e.target.closest('.descriptor-list-item');
+                if (descriptorItem) {
+                    const { subject, descriptorCode } = descriptorItem.dataset;
+                    currentViewInfo.descriptor = descritores[subject][descriptorCode];
+                    renderQuestionsForDescriptor(subject, descriptorCode, document.getElementById('content-container'));
+                    updateBreadcrumb();
+                }
+            });
+
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+            document.addEventListener('keydown', e => { if (e.key === "Escape") closeModal(); });
+        });
+    </script>
+</body>
+</html>
+
